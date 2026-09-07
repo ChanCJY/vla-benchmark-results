@@ -8,8 +8,10 @@ RoboTwin 2.0 与 LIBERO 开源模型测评结果展示页，页面风格参考 T
 
 - 2026-09-07 同步自 `lingbotvla+ACT+pi05+RDT_eval_result.docx`；
 - 2026-09-07 追加同步 `starVLA.docx`（StarVLA-FAST / OFT / GR00T / π 的 LIBERO 全套结果）；
+- 2026-09-07 追加同步 `(完整)XVLA-RoboTwin.docx`（X-VLA 两个 checkpoint 的 RoboTwin 2.0 结果）；
 - 每个表格只收录 **Ours** 列，“Author’s” 列未收录；
-- RoboTwin 2.0：LingBot-VLA（无深度 / 有深度）、ACT 各 50 任务，RDT 文档仅含 31 个任务；
+- RoboTwin 2.0：LingBot-VLA（无深度 / 有深度）、ACT 各 50 任务，RDT 仅含 31 个任务；
+- RoboTwin 2.0：X-VLA 80k / bs16 / 2×A100（41/50 任务）与 40k / bs56 / 6×A100（50 任务）；
 - LIBERO：Pi0.5（Spatial）与 StarVLA 各变体（Spatial / Object / Goal / LIBERO-10 / Long），每套件 10 任务 × 50 episodes；
 - StarVLA-π (Qwen3-VL) 的 LIBERO-Goal 在两份文档中不一致，本页以更新的 `starVLA.docx`（97.6）为准。
 
