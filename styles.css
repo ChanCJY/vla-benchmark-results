@@ -722,6 +722,14 @@ section {
   margin-top: 2px;
 }
 
+.results-table th .th-sub {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
 .results-table td {
   padding: 11px 14px;
   border-bottom: 1px solid #eef0f3;
@@ -742,7 +750,8 @@ section {
 
 .task-cell {
   font-weight: 600;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .task-cell .task-sub {

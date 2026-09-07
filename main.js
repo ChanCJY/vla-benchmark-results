@@ -50,6 +50,20 @@
     return null;
   }
 
+  /* 某基准实际参与对比的模型（可按 bench.models 限定列） */
+  function benchModels(bench) {
+    if (bench.models && bench.models.length) {
+      var wanted = {};
+      bench.models.forEach(function (id) {
+        wanted[id] = true;
+      });
+      return data.models.filter(function (m) {
+        return wanted[m.id];
+      });
+    }
+    return data.models.slice();
+  }
+
   function isRollup(task) {
     return task.isRollup === true;
   }
@@ -58,9 +72,10 @@
   function benchmarkAverages(bench) {
     var sums = {};
     var counts = {};
+    var list = benchModels(bench);
     bench.tasks.forEach(function (task) {
       if (isRollup(task)) return;
-      data.models.forEach(function (m) {
+      list.forEach(function (m) {
         var v = task.scores ? task.scores[m.id] : undefined;
         if (v === undefined || v === null) return;
         sums[m.id] = (sums[m.id] || 0) + Number(v);
@@ -68,7 +83,7 @@
       });
     });
     var result = {};
-    data.models.forEach(function (m) {
+    list.forEach(function (m) {
       if (counts[m.id]) {
         result[m.id] = sums[m.id] / counts[m.id];
       }
@@ -200,10 +215,24 @@
 
   /* ---------- 结果表 ---------- */
   function renderBenchmark(bench) {
-    var host = document.getElementById("bench-" + bench.id);
-    if (!host) return;
-    host.textContent = "";
+    var rootHost = null;
+    if (bench.group === "libero") {
+      rootHost = document.getElementById("liberoBenchRoot");
+    } else {
+      rootHost = document.getElementById("bench-" + bench.id);
+    }
+    if (!rootHost) return;
 
+    /* 每个基准使用独立子容器，避免共用容器时互相清空 */
+    var block = document.getElementById("host-" + bench.id);
+    if (!block) {
+      block = el("div", "bench-block");
+      block.id = "host-" + bench.id;
+      rootHost.appendChild(block);
+    }
+    block.textContent = "";
+
+    var list = benchModels(bench);
     var card = el("div", "card bench-card");
     var avgs = benchmarkAverages(bench);
     var ranking = topModels(avgs);
@@ -243,8 +272,12 @@
     headRow.appendChild(el("th", null, "#"));
     headRow.appendChild(el("th", null, "任务 Task"));
 
-    data.models.forEach(function (m, i) {
+    list.forEach(function (m, i) {
       var th = el("th", "model-col", m.name);
+      if (m.base) {
+        var sub = el("span", "th-sub", m.base);
+        th.appendChild(sub);
+      }
       var isTop = ranking.length && ranking[0].id === m.id;
       if (isTop) {
         th.appendChild(el("span", "trophy", "🏆 平均最优"));
@@ -268,7 +301,7 @@
       tr.appendChild(taskCell);
 
       var rowMax = null;
-      data.models.forEach(function (m) {
+      list.forEach(function (m) {
         var v = task.scores ? task.scores[m.id] : undefined;
         var n = fmt(v);
         if (n !== null) {
@@ -277,7 +310,7 @@
         }
       });
 
-      data.models.forEach(function (m) {
+      list.forEach(function (m) {
         var v = task.scores ? task.scores[m.id] : undefined;
         var n = fmt(v);
         var td = el("td", "score-cell", n === null ? "—" : n + "%");
@@ -304,7 +337,7 @@
       ranking.forEach(function (r, i) {
         rankMap[r.id] = i;
       });
-      data.models.forEach(function (m) {
+      list.forEach(function (m) {
         var td = el("td", "score-cell");
         if (avgs[m.id] === undefined) {
           td.textContent = "—";
@@ -341,12 +374,11 @@
     foot.appendChild(el("span", null, bench.footNote || bench.metric || ""));
     card.appendChild(foot);
 
-    host.appendChild(card);
+    block.appendChild(card);
   }
 
   /* ---------- 分析区 ---------- */
   function renderAnalysis() {
-    var allAvgs = {};
     var benchWinners = [];
 
     data.benchmarks.forEach(function (b) {
@@ -356,29 +388,6 @@
         bench: b,
         ranking: ranking,
       });
-      data.models.forEach(function (m) {
-        if (avgs[m.id] !== undefined) {
-          if (!allAvgs[m.id]) {
-            allAvgs[m.id] = { sum: 0, count: 0 };
-          }
-          allAvgs[m.id].sum += avgs[m.id];
-          allAvgs[m.id].count += 1;
-        }
-      });
-    });
-
-    /* 综合最优 */
-    var overall = [];
-    data.models.forEach(function (m) {
-      if (allAvgs[m.id] && allAvgs[m.id].count) {
-        overall.push({
-          id: m.id,
-          avg: allAvgs[m.id].sum / allAvgs[m.id].count,
-        });
-      }
-    });
-    overall.sort(function (a, b) {
-      return b.avg - a.avg;
     });
 
     var cardsRoot = document.getElementById("analysisCards");
@@ -391,18 +400,6 @@
       card.appendChild(el("div", "big-num", num));
       card.appendChild(el("p", null, desc));
       cardsRoot.appendChild(card);
-    }
-
-    if (overall.length) {
-      var best = modelById(overall[0].id);
-      analysisCard(
-        "🏆",
-        "综合平均最优",
-        (best ? best.name : overall[0].id) + " · " + fmt(overall[0].avg) + "%",
-        "两个基准平均分的第一名"
-      );
-    } else {
-      analysisCard("🏆", "综合平均最优", "—", "暂无可计算数据");
     }
 
     benchWinners.forEach(function (w) {

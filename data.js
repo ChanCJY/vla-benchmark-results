@@ -2,16 +2,17 @@
  *  VLA Benchmark Results —— 数据配置文件
  *  所有测评分数都维护在这个文件里，改完刷新页面即可。
  *
- *  使用说明：
- *   1) scores 中的值表示成功率（%），如 76.0；
- *   2) 没有测过 / 没有记录的任务填 null（页面显示 “—”），
- *      也可以直接不写这个键；
- *   3) 新增任务：在对应 benchmark 的 tasks 数组里加一行；
- *   4) 新增模型：先在 models 里加模型，再在 tasks 的 scores 里补键；
- *   5) 全部填成真实数据后，把 meta.isSample 改为 false，
- *      页面顶部的“示例数据”提示会自动消失。
+ *  数据来源：lingbotvla+ACT+pi05+RDT_eval_result.docx
+ *  同步日期：2026-09-07
+ *  口径说明：仅记录文档中每个表格的 “Ours” 列，“Author’s” 列未收录；
+ *            未测 / 未提供数据的任务不写分数或填 null（页面显示 “—”）。
  *
- *  ⚠️ 当前 scores 中的数字只是排版用的示例占位值。
+ *  使用说明：
+ *   1) scores 中的值表示成功率（%），如 85.36 会显示为 85.4%；
+ *   2) 新增任务：在对应 benchmark 的 tasks 数组里加一行；
+ *   3) 新增模型：先在 models 里加模型，再在 tasks 的 scores 里补键，
+ *      并在对应 benchmark 的 models 数组里加入该模型 id；
+ *   4) 平均值、行内最高分、最优模型与图表由 main.js 自动计算。
  * ========================================================= */
 
 window.BENCH_DATA = {
@@ -22,173 +23,246 @@ window.BENCH_DATA = {
     organizer: "", // 可选：负责人 / 组名，会显示在页脚
     metricNote: "所有分数统一为成功率 Success Rate (%)，越高越好。",
     evalNotes: [
-      "分数为多次 episode 的成功率（Success Rate，%），数值来自官方/自建评测脚本。",
-      "RoboTwin 2.0 页面逐任务记录；未测任务显示 “—” 且不计入平均值。",
-      "LIBERO 按套件记录：Spatial / Object / Goal / Long(LIBERO-90)，LIBERO-10 行可填四个套件的综合均值。",
-      "评估环境、相机配置、动作空间等协议差异会影响分数对比，详见 README 中的记录模板。",
+      "RoboTwin 2.0：官方 50 个双臂灵巧操作任务，逐任务记录成功率。",
+      "RDT 的文档仅提供了 31/50 个任务结果，其余任务显示 “—” 且不计入其平均值。",
+      "LIBERO：每个套件 10 个任务 × 50 episodes；Pi0.5 仅测 LIBERO-Spatial，StarVLA-π / StarVLA-OFT（Qwen3-VL）按套件记录。",
+      "所有数值仅取自原文档 “Ours” 列，“Author’s” 列未收录。",
     ],
-    // 当前页面分数为示例占位数据。替换为真实结果后改成 false。
-    isSample: true,
-    sampleText:
-      "现在表格里的数字是占位示例，用来演示排版效果，不代表真实测评结果。",
+    isSample: false, // 已替换为真实测评数据
+    sampleText: "",
   },
 
   /* ---------- 被测模型 ---------- */
   models: [
     {
-      id: "starvla",
-      name: "StarVLA",
-      base: "Qwen-VL 系列底座 + Fast Action Tokens",
-      size: "3B / 4B 级",
-      desc: "乐高式 VLA 开发平台，提供模型改造与开源微调 checkpoint，支持 LIBERO 等多套件评测。",
-      tags: ["开源", "LIBERO 套件"],
-      repo: "https://github.com/starVLA/starVLA",
-      color: "#7c3aed",
+      id: "lingbot_nodepth",
+      name: "LingBot-VLA",
+      base: "w/o depth",
+      size: "",
+      desc: "无深度输入版本，RoboTwin 2.0 50 任务实测。",
+      tags: ["RoboTwin 2.0"],
+      repo: "",
+      color: "#dc2626",
+    },
+    {
+      id: "lingbot_depth",
+      name: "LingBot-VLA",
+      base: "w/ depth",
+      size: "",
+      desc: "带深度输入版本，RoboTwin 2.0 50 任务实测。",
+      tags: ["RoboTwin 2.0"],
+      repo: "",
+      color: "#b91c1c",
+    },
+    {
+      id: "act",
+      name: "ACT",
+      base: "A Simple Policy for Complex Tasks",
+      size: "",
+      desc: "机器人操作基线方法，RoboTwin 2.0 50 任务实测。",
+      tags: ["基线", "RoboTwin 2.0"],
+      repo: "",
+      color: "#2563eb",
     },
     {
       id: "pi05",
       name: "Pi0.5",
       base: "π0.5（PaliGemma 底座 + flow matching）",
       size: "3.3B",
-      desc: "Physical Intelligence 开源的通用 VLA，支持多种 embodiment 与动作模式，可通过 openpi 训练与评测。",
-      tags: ["开源", "openpi", "多形态"],
+      desc: "Physical Intelligence 开源的通用 VLA，LIBERO-Spatial 10 任务实测。",
+      tags: ["开源", "openpi", "LIBERO-Spatial"],
       repo: "https://github.com/physical-intelligence/openpi",
       color: "#0d9488",
     },
     {
-      id: "xvla",
-      name: "X-VLA",
-      base: "Soft-prompted Transformer（跨形态）",
-      size: "0.9B",
-      desc: "以 soft prompt 实现跨本体迁移的轻量 VLA，在多个仿真平台与真实机器人上验证，已集成进 LeRobot。",
-      tags: ["开源", "跨本体", "LeRobot"],
-      repo: "https://github.com/2toinf/X-VLA",
-      color: "#dc2626",
+      id: "rdt",
+      name: "RDT",
+      base: "Robotics Diffusion Transformer",
+      size: "",
+      desc: "扩散 Transformer 策略基线，RoboTwin 2.0 文档提供 31/50 任务实测。",
+      tags: ["基线", "RoboTwin 2.0"],
+      repo: "",
+      color: "#7c3aed",
     },
-    // 新增模型示例：复制下面这段并补上 scores 键即可
-    // {
-    //   id: "eventvla",
-    //   name: "EventVLA",
-    //   base: "…",
-    //   size: "…",
-    //   desc: "…",
-    //   tags: [],
-    //   repo: "",
-    //   color: "#2563eb",
-    // },
+    {
+      id: "starvla_pi",
+      name: "StarVLA-π",
+      base: "Qwen3-VL",
+      size: "",
+      desc: "StarVLA π 动作头版本，LIBERO-Goal 10 任务实测。",
+      tags: ["开源", "StarVLA", "LIBERO-Goal"],
+      repo: "https://github.com/starVLA/starVLA",
+      color: "#ea580c",
+    },
+    {
+      id: "starvla_oft",
+      name: "StarVLA-OFT",
+      base: "Qwen3-VL",
+      size: "",
+      desc: "StarVLA OFT 版本，LIBERO Goal / Object / Spatial / 10 共 40 任务实测。",
+      tags: ["开源", "StarVLA", "LIBERO 全套件"],
+      repo: "https://github.com/starVLA/starVLA",
+      color: "#0891b2",
+    },
   ],
 
   /* ---------- 基准与分数 ---------- */
   benchmarks: [
     {
       id: "robotwin2",
-      name: "RoboTwin 2.0",
+      group: "robotwin",
+      name: "RoboTwin 2.0 — 50 Bimanual Tasks",
       icon: "🦾",
       tagline:
-        "双臂灵巧操作仿真基准（官方 50 任务）。以下为示例行，可在 tasks 中按相同格式扩充全部任务。",
+        "双臂灵巧操作 50 任务。LingBot-VLA（无深度 / 有深度）、ACT、RDT 的 Ours 成功率（%）；RDT 文档仅含前 31 个任务。",
       metric: "成功率 Success Rate (%)",
+      models: ["lingbot_nodepth", "lingbot_depth", "act", "rdt"],
       tasks: [
-        {
-          task: "place_bread_skillet",
-          label: "放面包入锅",
-          scores: { starvla: 78.0, xvla: null, pi05: 74.0 },
-        },
-        {
-          task: "stack_blocks_three",
-          label: "堆叠三个积木",
-          scores: { starvla: 76.0, xvla: 72.0, pi05: 80.0 },
-        },
-        {
-          task: "open_microwave",
-          label: "打开微波炉",
-          scores: { starvla: 88.0, xvla: 84.0, pi05: 86.0 },
-        },
-        {
-          task: "put_bottles_dustbin",
-          label: "瓶子放入垃圾桶",
-          scores: { starvla: 84.0, xvla: 80.0, pi05: 82.0 },
-        },
-        {
-          task: "beat_block_hammer",
-          label: "锤子敲击积木",
-          scores: { starvla: 72.0, xvla: 70.0, pi05: 76.0 },
-        },
-        {
-          task: "grab_roller",
-          label: "抓取滚筒",
-          scores: { starvla: 90.0, xvla: 86.0, pi05: 88.0 },
-        },
-        {
-          task: "hanging_mug",
-          label: "悬挂马克杯",
-          scores: { starvla: 66.0, xvla: 58.0, pi05: 62.0 },
-        },
-        {
-          task: "open_laptop",
-          label: "打开笔记本电脑",
-          scores: { starvla: 86.0, xvla: 82.0, pi05: 84.0 },
-        },
-        {
-          task: "place_object_stand",
-          label: "物体放上支架",
-          scores: { starvla: 64.0, xvla: 60.0, pi05: 66.0 },
-        },
-        {
-          task: "press_stapler",
-          label: "按压订书机",
-          scores: { starvla: null, xvla: 78.0, pi05: 80.0 },
-        },
-        {
-          task: "rotate_qrcode",
-          label: "旋转二维码",
-          scores: { starvla: 70.0, xvla: 66.0, pi05: null },
-        },
-        {
-          task: "turn_switch",
-          label: "转动开关",
-          scores: { starvla: 92.0, xvla: 90.0, pi05: 88.0 },
-        },
+        { task: "adjust_bottle", label: "调整瓶", scores: { lingbot_nodepth: 99, lingbot_depth: 100, act: 98, rdt: 84 } },
+        { task: "beat_block_hammer", label: "击块锤", scores: { lingbot_nodepth: 84, lingbot_depth: 91, act: 53, rdt: 66 } },
+        { task: "blocks_ranking_rgb", label: "红绿蓝块摆放(等大)", scores: { lingbot_nodepth: 96, lingbot_depth: 95, act: 0, rdt: 2 } },
+        { task: "blocks_ranking_size", label: "大中小块摆放(随机色)", scores: { lingbot_nodepth: 71, lingbot_depth: 69, act: 1, rdt: 0 } },
+        { task: "click_alarmclock", label: "点击闹钟", scores: { lingbot_nodepth: 23, lingbot_depth: 73, act: 32, rdt: 56 } },
+        { task: "click_bell", label: "点击铃铛", scores: { lingbot_nodepth: 38, lingbot_depth: 84, act: 56, rdt: 77 } },
+        { task: "dump_bin_bigbin", label: "拿起小桶，把球倒入大桶", scores: { lingbot_nodepth: 78, lingbot_depth: 80, act: 60, rdt: 61 } },
+        { task: "grab_roller", label: "抓取滚筒", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 94, rdt: 74 } },
+        { task: "handover_block", label: "交接块", scores: { lingbot_nodepth: 97, lingbot_depth: 87, act: 40, rdt: 26 } },
+        { task: "handover_mic", label: "交接麦克风", scores: { lingbot_nodepth: 92, lingbot_depth: 96, act: 88, rdt: 89 } },
+        { task: "hanging_mug", label: "悬挂的杯子", scores: { lingbot_nodepth: 44, lingbot_depth: 49, act: 11, rdt: 18 } },
+        { task: "lift_pot", label: "抬锅", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 85, rdt: 75 } },
+        { task: "move_can_pot", label: "移动罐头", scores: { lingbot_nodepth: 87, lingbot_depth: 70, act: 25, rdt: 22 } },
+        { task: "move_pillbottle_pad", label: "移动药瓶到垫", scores: { lingbot_nodepth: 89, lingbot_depth: 92, act: 0, rdt: 4 } },
+        { task: "move_playingcard_away", label: "移开扑克牌", scores: { lingbot_nodepth: 100, lingbot_depth: 99, act: 38, rdt: 41 } },
+        { task: "move_stapler_pad", label: "移动订书机到垫", scores: { lingbot_nodepth: 68, lingbot_depth: 66, act: 0, rdt: 1 } },
+        { task: "open_laptop", label: "打开笔记本电脑", scores: { lingbot_nodepth: 95, lingbot_depth: 95, act: 59, rdt: 63 } },
+        { task: "open_microwave", label: "打开微波炉", scores: { lingbot_nodepth: 57, lingbot_depth: 73, act: 85, rdt: 53 } },
+        { task: "pick_diverse_bottles", label: "两臂拿不同款瓶", scores: { lingbot_nodepth: 87, lingbot_depth: 77, act: 5 } },
+        { task: "pick_dual_bottles", label: "两臂拿同款瓶", scores: { lingbot_nodepth: 92, lingbot_depth: 86, act: 30 } },
+        { task: "place_a2b_left", label: "把a放在b左边", scores: { lingbot_nodepth: 87, lingbot_depth: 82, act: 0, rdt: 4 } },
+        { task: "place_a2b_right", label: "把a放在b右边", scores: { lingbot_nodepth: 80, lingbot_depth: 77, act: 0, rdt: 2 } },
+        { task: "place_bread_basket", label: "放置面包到篮", scores: { lingbot_nodepth: 91, lingbot_depth: 92, act: 3, rdt: 6 } },
+        { task: "place_bread_skillet", label: "放置面包到煎锅", scores: { lingbot_nodepth: 88, lingbot_depth: 86, act: 8, rdt: 7 } },
+        { task: "place_burger_fries", label: "放置汉堡薯条到盘", scores: { lingbot_nodepth: 99, lingbot_depth: 99, act: 53, rdt: 49 } },
+        { task: "place_can_basket", label: "放置罐头到篮，提起", scores: { lingbot_nodepth: 86, lingbot_depth: 58, act: 2, rdt: 20 } },
+        { task: "place_cans_plasticbox", label: "放置罐头到塑料盒", scores: { lingbot_nodepth: 97, lingbot_depth: 100, act: 18, rdt: 5 } },
+        { task: "place_container_plate", label: "放置容器到板", scores: { lingbot_nodepth: 99, lingbot_depth: 99, act: 63, rdt: 78 } },
+        { task: "place_dual_shoes", label: "放置双鞋", scores: { lingbot_nodepth: 77, lingbot_depth: 83, act: 4, rdt: 6 } },
+        { task: "place_empty_cup", label: "放置空杯子", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 62, rdt: 54 } },
+        { task: "place_fan", label: "放置风扇", scores: { lingbot_nodepth: 81, lingbot_depth: 83, act: 1, rdt: 17 } },
+        { task: "place_mouse_pad", label: "放置鼠标到垫", scores: { lingbot_nodepth: 88, lingbot_depth: 85, act: 0, rdt: 1 } },
+        { task: "place_object_basket", label: "放置物品到篮", scores: { lingbot_nodepth: 89, lingbot_depth: 87, act: 14, rdt: 31 } },
+        { task: "place_object_scale", label: "放置物品到秤", scores: { lingbot_nodepth: 89, lingbot_depth: 88, act: 0 } },
+        { task: "place_object_stand", label: "放置物体到支架", scores: { lingbot_nodepth: 96, lingbot_depth: 95, act: 0 } },
+        { task: "place_phone_stand", label: "放置手机到支架", scores: { lingbot_nodepth: 89, lingbot_depth: 87, act: 1 } },
+        { task: "place_shoe", label: "放置鞋子", scores: { lingbot_nodepth: 91, lingbot_depth: 90, act: 2 } },
+        { task: "press_stapler", label: "压订书机", scores: { lingbot_nodepth: 93, lingbot_depth: 90, act: 30 } },
+        { task: "put_bottles_dustbin", label: "把瓶子放在垃圾桶里", scores: { lingbot_nodepth: 83, lingbot_depth: 85, act: 29 } },
+        { task: "put_object_cabinet", label: "放置物品到柜", scores: { lingbot_nodepth: 86, lingbot_depth: 82, act: 5 } },
+        { task: "rotate_qrcode", label: "旋转二维码", scores: { lingbot_nodepth: 85, lingbot_depth: 83, act: 0 } },
+        { task: "scan_object", label: "扫描对象", scores: { lingbot_nodepth: 93, lingbot_depth: 94, act: 2 } },
+        { task: "shake_bottle_horizontally", label: "水平摇晃瓶子", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 60 } },
+        { task: "shake_bottle", label: "摇晃瓶子", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 74 } },
+        { task: "stack_blocks_three", label: "红绿蓝块堆叠", scores: { lingbot_nodepth: 93, lingbot_depth: 89, act: 0 } },
+        { task: "stack_blocks_two", label: "红绿块堆叠", scores: { lingbot_nodepth: 98, lingbot_depth: 99, act: 28 } },
+        { task: "stack_bowls_three", label: "堆叠三个碗", scores: { lingbot_nodepth: 86, lingbot_depth: 74, act: 59 } },
+        { task: "stack_bowls_two", label: "堆叠两个碗", scores: { lingbot_nodepth: 98, lingbot_depth: 97, act: 85 } },
+        { task: "stamp_seal", label: "盖章", scores: { lingbot_nodepth: 74, lingbot_depth: 77, act: 3 } },
+        { task: "turn_switch", label: "拨动开关", scores: { lingbot_nodepth: 55, lingbot_depth: 62, act: 3 } },
       ],
       footNote:
-        "示例仅含 12 个任务；全部 50 个任务名见 RoboTwin/description/task_instruction/。",
+        "仅收录文档 Ours 列；RDT 仅提供前 31 个任务，其余任务 “—” 不计入平均值。",
     },
+
     {
-      id: "libero",
-      name: "LIBERO",
+      id: "libero_spatial",
+      group: "libero",
+      name: "LIBERO-Spatial",
       icon: "🧩",
-      tagline:
-        "单臂操作仿真基准。Spatial / Object / Goal / Long(LIBERO-90) 按官方套件记录；LIBERO-10 为四套件综合成绩行。",
+      tagline: "10 任务 × 50 episodes。Pi0.5 与 StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
       metric: "成功率 Success Rate (%)",
+      models: ["pi05", "starvla_oft"],
       tasks: [
-        {
-          task: "LIBERO-Spatial",
-          label: "空间理解",
-          scores: { starvla: 92.5, xvla: 90.0, pi05: 91.2 },
-        },
-        {
-          task: "LIBERO-Object",
-          label: "物体属性",
-          scores: { starvla: 88.3, xvla: 84.6, pi05: 87.0 },
-        },
-        {
-          task: "LIBERO-Goal",
-          label: "目标推断",
-          scores: { starvla: 89.2, xvla: 86.1, pi05: 88.4 },
-        },
-        {
-          task: "LIBERO-90",
-          label: "长程 Long",
-          scores: { starvla: 85.7, xvla: 81.9, pi05: 84.0 },
-        },
-        {
-          task: "LIBERO-10",
-          label: "四套件综合",
-          scores: { starvla: 88.9, xvla: 85.7, pi05: 87.7 },
-          isRollup: true,
-        },
+        { task: "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
+        { task: "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 98 } },
+        { task: "pick_up_the_black_bowl_from_table_center_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
+        { task: "pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
+        { task: "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate", scores: { pi05: 96, starvla_oft: 94 } },
+        { task: "pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 99, starvla_oft: 96 } },
+        { task: "pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
+        { task: "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 98 } },
+        { task: "pick_up_the_black_bowl_next_to_the_plate_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
+        { task: "pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate", scores: { pi05: 96, starvla_oft: 100 } },
       ],
-      footNote:
-        "LIBERO-10 是综合成绩行，不计入平均值计算；官方口径为四套件各自平均后再取均值。",
+      footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
+    },
+
+    {
+      id: "libero_goal",
+      group: "libero",
+      name: "LIBERO-Goal",
+      icon: "🎯",
+      tagline: "10 任务 × 50 episodes。StarVLA-π 与 StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
+      metric: "成功率 Success Rate (%)",
+      models: ["starvla_pi", "starvla_oft"],
+      tasks: [
+        { task: "open_the_middle_drawer_of_the_cabinet", scores: { starvla_pi: 60, starvla_oft: 100 } },
+        { task: "put_the_bowl_on_the_stove", scores: { starvla_pi: 98, starvla_oft: 100 } },
+        { task: "put_the_wine_bottle_on_top_of_the_cabinet", scores: { starvla_pi: 62, starvla_oft: 100 } },
+        { task: "open_the_top_drawer_and_put_the_bowl_inside", scores: { starvla_pi: 16, starvla_oft: 96 } },
+        { task: "put_the_bowl_on_top_of_the_cabinet", scores: { starvla_pi: 98, starvla_oft: 100 } },
+        { task: "push_the_plate_to_the_front_of_the_stove", scores: { starvla_pi: 80, starvla_oft: 94 } },
+        { task: "put_the_cream_cheese_in_the_bowl", scores: { starvla_pi: 56, starvla_oft: 100 } },
+        { task: "turn_on_the_stove", scores: { starvla_pi: 100, starvla_oft: 100 } },
+        { task: "put_the_bowl_on_the_plate", scores: { starvla_pi: 92, starvla_oft: 100 } },
+        { task: "put_the_wine_bottle_on_the_rack", scores: { starvla_pi: 26, starvla_oft: 96 } },
+      ],
+      footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
+    },
+
+    {
+      id: "libero_object",
+      group: "libero",
+      name: "LIBERO-Object",
+      icon: "📦",
+      tagline: "10 任务 × 50 episodes。StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
+      metric: "成功率 Success Rate (%)",
+      models: ["starvla_oft"],
+      tasks: [
+        { task: "pick_up_the_alphabet_soup_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_cream_cheese_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_salad_dressing_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_bbq_sauce_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_ketchup_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_tomato_sauce_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_butter_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_milk_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_chocolate_pudding_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_orange_juice_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+      ],
+      footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
+    },
+
+    {
+      id: "libero_10",
+      group: "libero",
+      name: "LIBERO-10",
+      icon: "🏅",
+      tagline: "10 个跨套件任务 × 50 episodes。StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
+      metric: "成功率 Success Rate (%)",
+      models: ["starvla_oft"],
+      tasks: [
+        { task: "put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "put_both_the_cream_cheese_box_and_the_butter_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "turn_on_the_stove_and_put_the_moka_pot_on_it", scores: { starvla_oft: 100 } },
+        { task: "put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it", scores: { starvla_oft: 88 } },
+        { task: "put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate", scores: { starvla_oft: 94 } },
+        { task: "pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy", scores: { starvla_oft: 100 } },
+        { task: "put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate", scores: { starvla_oft: 86 } },
+        { task: "put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "put_both_moka_pots_on_the_stove", scores: { starvla_oft: 92 } },
+        { task: "put_the_yellow_and_white_mug_in_the_microwave_and_close_it", scores: { starvla_oft: 94 } },
+      ],
+      footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
     },
   ],
 };

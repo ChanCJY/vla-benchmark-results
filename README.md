@@ -4,6 +4,13 @@ RoboTwin 2.0 与 LIBERO 开源模型测评结果展示页，页面风格参考 T
 
 📎 线上地址（GitHub Pages）：https://chancjy.github.io/vla-benchmark-results/
 
+## 数据来源与口径
+
+- 2026-09-07 同步自 `lingbotvla+ACT+pi05+RDT_eval_result.docx`；
+- 每个表格只收录 **Ours** 列，“Author’s” 列未收录；
+- RoboTwin 2.0：LingBot-VLA（无深度 / 有深度）、ACT 各 50 任务，RDT 文档仅含 31 个任务；
+- LIBERO：Pi0.5（Spatial）、StarVLA-π / StarVLA-OFT（Qwen3-VL，Goal / Object / Spatial / LIBERO-10），每套件 10 任务 × 50 episodes。
+
 ## 目录结构
 
 ```text
