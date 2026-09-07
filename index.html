@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Open-source embodied VLA models benchmark on RoboTwin 2.0 and LIBERO. 开源具身 VLA 模型 RoboTwin 2.0 与 LIBERO 基准测评结果。"
+    />
+    <title>VLA Benchmark Results — RoboTwin 2.0 × LIBERO</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- ===== 左侧导航 ===== -->
+    <aside class="left-sidebar" id="leftSidebar">
+      <div class="sidebar-header">
+        <div class="brand-mark">VLA</div>
+        <h3>Benchmark</h3>
+        <p>RoboTwin 2.0 · LIBERO</p>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-section">🏠 返回顶部</a></li>
+        <li><a href="#overview">📊 测评概览</a></li>
+        <li><a href="#models">🤖 模型列表</a></li>
+        <li><a href="#robotwin2">🦾 RoboTwin 2.0</a></li>
+        <li><a href="#libero">🧩 LIBERO</a></li>
+        <li><a href="#analysis">📈 结果分析</a></li>
+        <li><a href="#guide">✍️ 如何更新数据</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="sidebar-status">
+          <span class="status-dot"></span>
+          <span id="sidebarUpdated">…</span>
+        </div>
+        <p>数据以 data.js 为准</p>
+      </div>
+    </aside>
+
+    <!-- ===== 移动端顶部导航 ===== -->
+    <nav class="mobile-topbar" aria-label="页面导航">
+      <div class="mobile-brand">VLA Benchmark</div>
+      <div class="mobile-tabs" id="mobileTabs">
+        <a href="#home" class="active">概览</a>
+        <a href="#models">模型</a>
+        <a href="#robotwin2">RoboTwin</a>
+        <a href="#libero">LIBERO</a>
+        <a href="#analysis">分析</a>
+        <a href="#guide">更新</a>
+      </div>
+    </nav>
+
+    <!-- ===== 主内容 ===== -->
+    <main class="main-content">
+      <!-- Hero -->
+      <section id="home" class="hero">
+        <div class="container">
+          <div class="hero-badge-row">
+            <span class="pill">🦾 RoboTwin 2.0</span>
+            <span class="pill">🧩 LIBERO</span>
+            <span class="pill">⚙️ Open-Source VLAs</span>
+          </div>
+          <h1 class="hero-title">
+            Open-Source <span class="accent glitch" data-text="VLA">VLA</span>
+            Leaderboard
+          </h1>
+          <p class="hero-subtitle">
+            RoboTwin 2.0 × LIBERO 开源具身大模型测评结果记录
+          </p>
+
+          <div class="hero-stats" id="heroStats">
+            <div class="stat-tile">
+              <div class="stat-num" id="statBenchmarks">–</div>
+              <div class="stat-label">测评基准</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-num" id="statModels">–</div>
+              <div class="stat-label">收录模型</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-num" id="statTasks">–</div>
+              <div class="stat-label">任务 / 子项</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-num" id="statUpdated">–</div>
+              <div class="stat-label">最近更新</div>
+            </div>
+          </div>
+
+          <div class="sample-banner" id="sampleBanner" hidden>
+            <span class="sample-icon">✍️</span>
+            <div>
+              <strong>当前展示的是示例占位数据。</strong>
+              <span id="sampleBannerText"></span>
+              把 <code>data.js</code> 里的分数替换成真实测评结果后，页面会自动更新。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 概览 -->
+      <section id="overview">
+        <div class="container">
+          <div class="section-head">
+            <h2>📊 测评概览</h2>
+            <p id="overviewLead"></p>
+          </div>
+          <div class="grid grid-3" id="overviewCards">
+            <div class="card mini-card">
+              <div class="mini-icon">🦾</div>
+              <h3>RoboTwin 2.0</h3>
+              <p>
+                双臂灵巧操作仿真基准，覆盖抓取、放置、堆叠、工具使用等长程任务；
+                页面按任务记录成功率。
+              </p>
+            </div>
+            <div class="card mini-card">
+              <div class="mini-icon">🧩</div>
+              <h3>LIBERO</h3>
+              <p>
+                单臂任务仿真基准，按 Spatial / Object / Goal / Long 等套件记录成功率。
+              </p>
+            </div>
+            <div class="card mini-card">
+              <div class="mini-icon">🎯</div>
+              <h3>统一口径</h3>
+              <p id="metricNote"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 模型列表 -->
+      <section id="models">
+        <div class="container">
+          <div class="section-head">
+            <h2>🤖 被测模型</h2>
+            <p>添加或修改模型信息：编辑 <code>data.js</code> 的 <code>models</code> 数组。</p>
+          </div>
+          <div class="grid grid-3" id="modelCards"></div>
+        </div>
+      </section>
+
+      <!-- RoboTwin 2.0 -->
+      <section id="robotwin2">
+        <div class="container">
+          <div class="section-head">
+            <h2>🦾 RoboTwin 2.0</h2>
+            <p>双臂灵巧操作 · 成功率 Success Rate (%)</p>
+          </div>
+          <div id="bench-robotwin2"></div>
+        </div>
+      </section>
+
+      <!-- LIBERO -->
+      <section id="libero">
+        <div class="container">
+          <div class="section-head">
+            <h2>🧩 LIBERO</h2>
+            <p>单臂任务 · 成功率 Success Rate (%)</p>
+          </div>
+          <div id="bench-libero"></div>
+        </div>
+      </section>
+
+      <!-- 结果分析 -->
+      <section id="analysis">
+        <div class="container">
+          <div class="section-head">
+            <h2>📈 结果分析</h2>
+            <p>基于当前数据自动生成</p>
+          </div>
+          <div class="grid grid-3" id="analysisCards"></div>
+          <div class="chart-grid" id="chartRoot"></div>
+          <div class="card note-card">
+            <h4>📝 测评说明</h4>
+            <ul id="evalNotes"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 更新指南 -->
+      <section id="guide">
+        <div class="container">
+          <div class="section-head">
+            <h2>✍️ 如何更新数据</h2>
+            <p>所有分数都集中在 <code>data.js</code> 一个文件里，改完刷新即可。</p>
+          </div>
+          <div class="guide-grid">
+            <div class="card guide-card">
+              <div class="guide-step">1</div>
+              <h3>填分数</h3>
+              <p>
+                打开 <code>data.js</code>，在 <code>scores</code> 中把
+                <code>null</code> 替换为测评成功率数字（百分数）。
+              </p>
+            </div>
+            <div class="card guide-card">
+              <div class="guide-step">2</div>
+              <h3>加任务</h3>
+              <p>
+                在 <code>tasks</code> 数组里增加一行即可新增任务；RoboTwin 全部
+                50 个任务名可参考
+                <code>RoboTwin/description/task_instruction/</code>。
+              </p>
+            </div>
+            <div class="card guide-card">
+              <div class="guide-step">3</div>
+              <h3>加模型</h3>
+              <p>
+                在 <code>models</code> 数组追加模型，并在各基准的
+                <code>scores</code> 中补上对应键的分数。
+              </p>
+            </div>
+          </div>
+          <div class="card guide-code-card">
+            <h4>data.js 编辑示例</h4>
+            <pre><code>{
+  task: "stack_blocks_three",        // 任务名（与目录中的文件名保持一致）
+  label: "堆叠三个积木",              // 可选：页面上显示的中文名
+  scores: {
+    starvla: 76.0,                   // 填写真实成功率，例如 76.0
+    xvla: null,                      // null 或留空 = 页面显示 —
+    pi05: 80.0
+  }
+},</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="container footer-inner">
+          <p id="footerText"></p>
+          <p class="muted">
+            Built with the TermiBrain-style light theme · 分数请以 <code>data.js</code> 为准
+          </p>
+        </div>
+      </footer>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
