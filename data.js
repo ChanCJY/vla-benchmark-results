@@ -2,13 +2,16 @@
  *  VLA Benchmark Results —— 数据配置文件
  *  所有测评分数都维护在这个文件里，改完刷新页面即可。
  *
- *  数据来源：lingbotvla+ACT+pi05+RDT_eval_result.docx
- *  同步日期：2026-09-07
- *  口径说明：仅记录文档中每个表格的 “Ours” 列，“Author’s” 列未收录；
+ *  数据来源：
+ *    1) lingbotvla+ACT+pi05+RDT_eval_result.docx（RoboTwin 2.0 等，同步于 2026-09-07）
+ *    2) starVLA.docx（StarVLA LIBERO 全套结果，同步于 2026-09-07）
+ *  口径说明：仅收录每张表格的 “Ours” 列，“Author’s” 列未收录；
  *            未测 / 未提供数据的任务不写分数或填 null（页面显示 “—”）。
+ *  冲突处理：starVLA.docx 与上一份文档中 StarVLA-π (Qwen3-VL) 的
+ *            LIBERO-Goal 数值不一致，本页以更新的 starVLA.docx 为准。
  *
  *  使用说明：
- *   1) scores 中的值表示成功率（%），如 85.36 会显示为 85.4%；
+ *   1) scores 中的值表示成功率（%），如 89.6 会显示为 89.6%；
  *   2) 新增任务：在对应 benchmark 的 tasks 数组里加一行；
  *   3) 新增模型：先在 models 里加模型，再在 tasks 的 scores 里补键，
  *      并在对应 benchmark 的 models 数组里加入该模型 id；
@@ -23,9 +26,10 @@ window.BENCH_DATA = {
     organizer: "", // 可选：负责人 / 组名，会显示在页脚
     metricNote: "所有分数统一为成功率 Success Rate (%)，越高越好。",
     evalNotes: [
-      "RoboTwin 2.0：官方 50 个双臂灵巧操作任务，逐任务记录成功率。",
-      "RDT 的文档仅提供了 31/50 个任务结果，其余任务显示 “—” 且不计入其平均值。",
-      "LIBERO：每个套件 10 个任务 × 50 episodes；Pi0.5 仅测 LIBERO-Spatial，StarVLA-π / StarVLA-OFT（Qwen3-VL）按套件记录。",
+      "RoboTwin 2.0：官方 50 个双臂灵巧操作任务，逐任务记录成功率；RDT 文档仅提供 31/50 个任务。",
+      "LIBERO：每个套件 10 个任务 × 50 episodes，StarVLA 各变体按套件记录逐任务 Ours 结果。",
+      "LIBERO 汇总卡片中的 Long 与各套件平均值来自 starVLA.docx 汇总表；Long 无逐任务明细。",
+      "StarVLA-π (Qwen3-VL) 的 LIBERO-Goal 与上一份文档不一致，本页以更新的 starVLA.docx（97.6）为准。",
       "所有数值仅取自原文档 “Ours” 列，“Author’s” 列未收录。",
     ],
     isSample: false, // 已替换为真实测评数据
@@ -85,24 +89,54 @@ window.BENCH_DATA = {
       color: "#7c3aed",
     },
     {
-      id: "starvla_pi",
-      name: "StarVLA-π",
-      base: "Qwen3-VL",
+      id: "starvla_fast_q25",
+      name: "StarVLA-FAST",
+      base: "Qwen2.5-VL · 30K",
       size: "",
-      desc: "StarVLA π 动作头版本，LIBERO-Goal 10 任务实测。",
-      tags: ["开源", "StarVLA", "LIBERO-Goal"],
+      desc: "StarVLA FAST 动作头版本，LIBERO Spatial / Object / Goal / Long 全套件实测。",
+      tags: ["开源", "StarVLA", "Qwen2.5-VL"],
       repo: "https://github.com/starVLA/starVLA",
-      color: "#ea580c",
+      color: "#ca8a04",
+    },
+    {
+      id: "starvla_oft_q25",
+      name: "StarVLA-OFT",
+      base: "Qwen2.5-VL · 30K",
+      size: "",
+      desc: "StarVLA OFT 版本（Qwen2.5-VL），LIBERO 全套件实测。",
+      tags: ["开源", "StarVLA", "Qwen2.5-VL"],
+      repo: "https://github.com/starVLA/starVLA",
+      color: "#0891b2",
+    },
+    {
+      id: "starvla_groot_q25",
+      name: "StarVLA-GR00T",
+      base: "Qwen2.5-VL · 30K",
+      size: "",
+      desc: "StarVLA GR00T 动作头版本，LIBERO 全套件实测。",
+      tags: ["开源", "StarVLA", "Qwen2.5-VL"],
+      repo: "https://github.com/starVLA/starVLA",
+      color: "#16a34a",
     },
     {
       id: "starvla_oft",
       name: "StarVLA-OFT",
-      base: "Qwen3-VL",
+      base: "Qwen3-VL · 50K",
       size: "",
-      desc: "StarVLA OFT 版本，LIBERO Goal / Object / Spatial / 10 共 40 任务实测。",
-      tags: ["开源", "StarVLA", "LIBERO 全套件"],
+      desc: "StarVLA OFT 版本（Qwen3-VL），LIBERO Goal / Object / Spatial / 10 共 40 任务实测。",
+      tags: ["开源", "StarVLA", "Qwen3-VL"],
       repo: "https://github.com/starVLA/starVLA",
-      color: "#0891b2",
+      color: "#2563eb",
+    },
+    {
+      id: "starvla_pi",
+      name: "StarVLA-π",
+      base: "Qwen3-VL · 100K",
+      size: "",
+      desc: "StarVLA π 动作头版本（Qwen3-VL），LIBERO 全套件实测（以 starVLA.docx 为准）。",
+      tags: ["开源", "StarVLA", "Qwen3-VL"],
+      repo: "https://github.com/starVLA/starVLA",
+      color: "#ea580c",
     },
   ],
 
@@ -173,94 +207,151 @@ window.BENCH_DATA = {
         "仅收录文档 Ours 列；RDT 仅提供前 31 个任务，其余任务 “—” 不计入平均值。",
     },
 
+    /* LIBERO 汇总（starVLA.docx 汇总表，含 Long 总平均） */
+    {
+      id: "libero_summary",
+      group: "libero",
+      isSummary: true,
+      name: "LIBERO 汇总（含 Long）",
+      icon: "🧾",
+      tagline:
+        "starVLA.docx 汇总表：各套件平均与 Long 总平均；Long 无逐任务明细，其余套件的逐任务表见下方卡片。",
+      metric: "平均成功率 Average Success Rate (%)",
+      models: [
+        "starvla_fast_q25",
+        "starvla_oft_q25",
+        "starvla_groot_q25",
+        "starvla_oft",
+        "starvla_pi",
+      ],
+      tasks: [
+        { task: "LIBERO-Spatial", label: "10 tasks 平均", scores: { starvla_fast_q25: 89.6, starvla_oft_q25: 98.0, starvla_groot_q25: 97.6, starvla_oft: 98.6, starvla_pi: 98.6 } },
+        { task: "LIBERO-Object", label: "10 tasks 平均", scores: { starvla_fast_q25: 97.4, starvla_oft_q25: 98.0, starvla_groot_q25: 99.2, starvla_oft: 100.0, starvla_pi: 97.8 } },
+        { task: "LIBERO-Goal", label: "10 tasks 平均", scores: { starvla_fast_q25: 90.0, starvla_oft_q25: 97.2, starvla_groot_q25: 97.2, starvla_oft: 98.6, starvla_pi: 97.6 } },
+        { task: "LIBERO-Long", label: "Long 总平均（无逐任务明细）", scores: { starvla_fast_q25: 84.4, starvla_oft_q25: 90.2, starvla_groot_q25: 90.2, starvla_oft: 95.4, starvla_pi: 95.6 } },
+      ],
+      footNote:
+        "综合平均行由 Spatial / Object / Goal / Long 四套件均值自动计算；StarVLA-π 计算值 97.4（文档汇总表标注 97.5）。",
+    },
+
+    /* LIBERO-Spatial：逐任务 */
     {
       id: "libero_spatial",
       group: "libero",
       name: "LIBERO-Spatial",
       icon: "🧩",
-      tagline: "10 任务 × 50 episodes。Pi0.5 与 StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
+      tagline: "10 任务 × 50 episodes 逐任务 Ours 成功率（%）：Pi0.5 与 StarVLA 各变体。",
       metric: "成功率 Success Rate (%)",
-      models: ["pi05", "starvla_oft"],
+      models: [
+        "pi05",
+        "starvla_fast_q25",
+        "starvla_oft_q25",
+        "starvla_groot_q25",
+        "starvla_oft",
+        "starvla_pi",
+      ],
       tasks: [
-        { task: "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
-        { task: "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 98 } },
-        { task: "pick_up_the_black_bowl_from_table_center_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
-        { task: "pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
-        { task: "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate", scores: { pi05: 96, starvla_oft: 94 } },
-        { task: "pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 99, starvla_oft: 96 } },
-        { task: "pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
-        { task: "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 98 } },
-        { task: "pick_up_the_black_bowl_next_to_the_plate_and_place_it_on_the_plate", scores: { pi05: 100, starvla_oft: 100 } },
-        { task: "pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate", scores: { pi05: 96, starvla_oft: 100 } },
+        { task: "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 78, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_black_bowl_next_to_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 88, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 98, starvla_pi: 98 } },
+        { task: "pick_up_the_black_bowl_from_table_center_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 94, starvla_oft_q25: 98, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_black_bowl_on_the_cookie_box_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 84, starvla_oft_q25: 100, starvla_groot_q25: 94, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_black_bowl_in_the_top_drawer_of_the_wooden_cabinet_and_place_it_on_the_plate", scores: { pi05: 96, starvla_fast_q25: 92, starvla_oft_q25: 100, starvla_groot_q25: 98, starvla_oft: 94, starvla_pi: 96 } },
+        { task: "pick_up_the_black_bowl_next_to_the_cookie_box_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 100, starvla_oft_q25: 98, starvla_groot_q25: 98, starvla_oft: 100, starvla_pi: 98 } },
+        { task: "pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate", scores: { pi05: 99, starvla_fast_q25: 92, starvla_oft_q25: 96, starvla_groot_q25: 94, starvla_oft: 96, starvla_pi: 98 } },
+        { task: "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 92, starvla_oft_q25: 92, starvla_groot_q25: 92, starvla_oft: 98, starvla_pi: 98 } },
+        { task: "pick_up_the_black_bowl_next_to_the_plate_and_place_it_on_the_plate", scores: { pi05: 100, starvla_fast_q25: 94, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate", scores: { pi05: 96, starvla_fast_q25: 82, starvla_oft_q25: 96, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 98 } },
       ],
       footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
     },
 
-    {
-      id: "libero_goal",
-      group: "libero",
-      name: "LIBERO-Goal",
-      icon: "🎯",
-      tagline: "10 任务 × 50 episodes。StarVLA-π 与 StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
-      metric: "成功率 Success Rate (%)",
-      models: ["starvla_pi", "starvla_oft"],
-      tasks: [
-        { task: "open_the_middle_drawer_of_the_cabinet", scores: { starvla_pi: 60, starvla_oft: 100 } },
-        { task: "put_the_bowl_on_the_stove", scores: { starvla_pi: 98, starvla_oft: 100 } },
-        { task: "put_the_wine_bottle_on_top_of_the_cabinet", scores: { starvla_pi: 62, starvla_oft: 100 } },
-        { task: "open_the_top_drawer_and_put_the_bowl_inside", scores: { starvla_pi: 16, starvla_oft: 96 } },
-        { task: "put_the_bowl_on_top_of_the_cabinet", scores: { starvla_pi: 98, starvla_oft: 100 } },
-        { task: "push_the_plate_to_the_front_of_the_stove", scores: { starvla_pi: 80, starvla_oft: 94 } },
-        { task: "put_the_cream_cheese_in_the_bowl", scores: { starvla_pi: 56, starvla_oft: 100 } },
-        { task: "turn_on_the_stove", scores: { starvla_pi: 100, starvla_oft: 100 } },
-        { task: "put_the_bowl_on_the_plate", scores: { starvla_pi: 92, starvla_oft: 100 } },
-        { task: "put_the_wine_bottle_on_the_rack", scores: { starvla_pi: 26, starvla_oft: 96 } },
-      ],
-      footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
-    },
-
+    /* LIBERO-Object：逐任务 */
     {
       id: "libero_object",
       group: "libero",
       name: "LIBERO-Object",
       icon: "📦",
-      tagline: "10 任务 × 50 episodes。StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
+      tagline: "10 任务 × 50 episodes 逐任务 Ours 成功率（%）：StarVLA 各变体。",
       metric: "成功率 Success Rate (%)",
-      models: ["starvla_oft"],
+      models: [
+        "starvla_fast_q25",
+        "starvla_oft_q25",
+        "starvla_groot_q25",
+        "starvla_oft",
+        "starvla_pi",
+      ],
       tasks: [
-        { task: "pick_up_the_alphabet_soup_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_cream_cheese_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_salad_dressing_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_bbq_sauce_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_ketchup_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_tomato_sauce_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_butter_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_milk_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_chocolate_pudding_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "pick_up_the_orange_juice_and_place_it_in_the_basket", scores: { starvla_oft: 100 } },
+        { task: "pick_up_the_alphabet_soup_and_place_it_in_the_basket", scores: { starvla_fast_q25: 96, starvla_oft_q25: 98, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 98 } },
+        { task: "pick_up_the_cream_cheese_and_place_it_in_the_basket", scores: { starvla_fast_q25: 98, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 98 } },
+        { task: "pick_up_the_salad_dressing_and_place_it_in_the_basket", scores: { starvla_fast_q25: 100, starvla_oft_q25: 98, starvla_groot_q25: 98, starvla_oft: 100, starvla_pi: 96 } },
+        { task: "pick_up_the_bbq_sauce_and_place_it_in_the_basket", scores: { starvla_fast_q25: 86, starvla_oft_q25: 94, starvla_groot_q25: 96, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_ketchup_and_place_it_in_the_basket", scores: { starvla_fast_q25: 98, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_tomato_sauce_and_place_it_in_the_basket", scores: { starvla_fast_q25: 98, starvla_oft_q25: 98, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 92 } },
+        { task: "pick_up_the_butter_and_place_it_in_the_basket", scores: { starvla_fast_q25: 100, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 98 } },
+        { task: "pick_up_the_milk_and_place_it_in_the_basket", scores: { starvla_fast_q25: 100, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "pick_up_the_chocolate_pudding_and_place_it_in_the_basket", scores: { starvla_fast_q25: 98, starvla_oft_q25: 92, starvla_groot_q25: 98, starvla_oft: 100, starvla_pi: 96 } },
+        { task: "pick_up_the_orange_juice_and_place_it_in_the_basket", scores: { starvla_fast_q25: 100, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
       ],
       footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
     },
 
+    /* LIBERO-Goal：逐任务 */
+    {
+      id: "libero_goal",
+      group: "libero",
+      name: "LIBERO-Goal",
+      icon: "🎯",
+      tagline: "10 任务 × 50 episodes 逐任务 Ours 成功率（%）：StarVLA 各变体。",
+      metric: "成功率 Success Rate (%)",
+      models: [
+        "starvla_fast_q25",
+        "starvla_oft_q25",
+        "starvla_groot_q25",
+        "starvla_oft",
+        "starvla_pi",
+      ],
+      tasks: [
+        { task: "open_the_middle_drawer_of_the_cabinet", scores: { starvla_fast_q25: 92, starvla_oft_q25: 100, starvla_groot_q25: 98, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_the_bowl_on_the_stove", scores: { starvla_fast_q25: 90, starvla_oft_q25: 92, starvla_groot_q25: 94, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_the_wine_bottle_on_top_of_the_cabinet", scores: { starvla_fast_q25: 96, starvla_oft_q25: 98, starvla_groot_q25: 98, starvla_oft: 100, starvla_pi: 96 } },
+        { task: "open_the_top_drawer_and_put_the_bowl_inside", scores: { starvla_fast_q25: 90, starvla_oft_q25: 96, starvla_groot_q25: 92, starvla_oft: 96, starvla_pi: 92 } },
+        { task: "put_the_bowl_on_top_of_the_cabinet", scores: { starvla_fast_q25: 96, starvla_oft_q25: 96, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 96 } },
+        { task: "push_the_plate_to_the_front_of_the_stove", scores: { starvla_fast_q25: 96, starvla_oft_q25: 100, starvla_groot_q25: 96, starvla_oft: 94, starvla_pi: 96 } },
+        { task: "put_the_cream_cheese_in_the_bowl", scores: { starvla_fast_q25: 82, starvla_oft_q25: 96, starvla_groot_q25: 98, starvla_oft: 100, starvla_pi: 98 } },
+        { task: "turn_on_the_stove", scores: { starvla_fast_q25: 100, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_the_bowl_on_the_plate", scores: { starvla_fast_q25: 98, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_the_wine_bottle_on_the_rack", scores: { starvla_fast_q25: 60, starvla_oft_q25: 94, starvla_groot_q25: 96, starvla_oft: 96, starvla_pi: 98 } },
+      ],
+      footNote:
+        "仅收录 Ours 列；StarVLA-π 的 Goal 以 starVLA.docx（97.6）为准。",
+    },
+
+    /* LIBERO-10：逐任务 */
     {
       id: "libero_10",
       group: "libero",
       name: "LIBERO-10",
       icon: "🏅",
-      tagline: "10 个跨套件任务 × 50 episodes。StarVLA-OFT (Qwen3-VL) 的 Ours 成功率（%）。",
+      tagline: "10 个跨套件任务 × 50 episodes 逐任务 Ours 成功率（%）：StarVLA 各变体。",
       metric: "成功率 Success Rate (%)",
-      models: ["starvla_oft"],
+      models: [
+        "starvla_fast_q25",
+        "starvla_oft_q25",
+        "starvla_groot_q25",
+        "starvla_oft",
+        "starvla_pi",
+      ],
       tasks: [
-        { task: "put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "put_both_the_cream_cheese_box_and_the_butter_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "turn_on_the_stove_and_put_the_moka_pot_on_it", scores: { starvla_oft: 100 } },
-        { task: "put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it", scores: { starvla_oft: 88 } },
-        { task: "put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate", scores: { starvla_oft: 94 } },
-        { task: "pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy", scores: { starvla_oft: 100 } },
-        { task: "put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate", scores: { starvla_oft: 86 } },
-        { task: "put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket", scores: { starvla_oft: 100 } },
-        { task: "put_both_moka_pots_on_the_stove", scores: { starvla_oft: 92 } },
-        { task: "put_the_yellow_and_white_mug_in_the_microwave_and_close_it", scores: { starvla_oft: 94 } },
+        { task: "put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket", scores: { starvla_fast_q25: 78, starvla_oft_q25: 98, starvla_groot_q25: 92, starvla_oft: 100, starvla_pi: 96 } },
+        { task: "put_both_the_cream_cheese_box_and_the_butter_in_the_basket", scores: { starvla_fast_q25: 92, starvla_oft_q25: 100, starvla_groot_q25: 96, starvla_oft: 100, starvla_pi: 96 } },
+        { task: "turn_on_the_stove_and_put_the_moka_pot_on_it", scores: { starvla_fast_q25: 94, starvla_oft_q25: 98, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_the_black_bowl_in_the_bottom_drawer_of_the_cabinet_and_close_it", scores: { starvla_fast_q25: 92, starvla_oft_q25: 94, starvla_groot_q25: 96, starvla_oft: 88, starvla_pi: 98 } },
+        { task: "put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate", scores: { starvla_fast_q25: 86, starvla_oft_q25: 92, starvla_groot_q25: 92, starvla_oft: 94, starvla_pi: 100 } },
+        { task: "pick_up_the_book_and_place_it_in_the_back_compartment_of_the_caddy", scores: { starvla_fast_q25: 100, starvla_oft_q25: 100, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate", scores: { starvla_fast_q25: 80, starvla_oft_q25: 80, starvla_groot_q25: 66, starvla_oft: 86, starvla_pi: 80 } },
+        { task: "put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket", scores: { starvla_fast_q25: 98, starvla_oft_q25: 82, starvla_groot_q25: 100, starvla_oft: 100, starvla_pi: 100 } },
+        { task: "put_both_moka_pots_on_the_stove", scores: { starvla_fast_q25: 46, starvla_oft_q25: 62, starvla_groot_q25: 66, starvla_oft: 92, starvla_pi: 94 } },
+        { task: "put_the_yellow_and_white_mug_in_the_microwave_and_close_it", scores: { starvla_fast_q25: 78, starvla_oft_q25: 96, starvla_groot_q25: 94, starvla_oft: 94, starvla_pi: 92 } },
       ],
       footNote: "仅收录 Ours 列（每任务 ×50 episodes）。",
     },

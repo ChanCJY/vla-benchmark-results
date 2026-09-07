@@ -148,11 +148,15 @@
   /* ---------- Hero 统计 ---------- */
   function renderStats() {
     var taskCount = 0;
+    var groups = {};
     data.benchmarks.forEach(function (b) {
-      taskCount += b.tasks.length;
+      groups[b.group || b.id] = true;
+      if (!b.isSummary) {
+        taskCount += b.tasks.length;
+      }
     });
     document.getElementById("statBenchmarks").textContent =
-      data.benchmarks.length;
+      Object.keys(groups).length;
     document.getElementById("statModels").textContent = data.models.length;
     document.getElementById("statTasks").textContent = taskCount;
   }
