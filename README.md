@@ -2,7 +2,7 @@
 
 RoboTwin 2.0 与 LIBERO 开源模型测评结果展示页，页面风格参考 TermiBrain-VL 站（浅色背景 + 红色强调 + 左侧导航 + 卡片布局）。
 
-📎 线上地址（GitHub Pages）：https://ChanCJY.github.io/vla-benchmark-results/
+📎 线上地址（GitHub Pages）：https://chancjy.github.io/vla-benchmark-results/
 
 ## 目录结构
 
