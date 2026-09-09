@@ -60,6 +60,36 @@ RoboTwin 2.0 官方 50 个任务名可参考仓库中的
 直接双击打开 `index.html` 即可（无需服务器）。若在浏览器里打开没有更新，
 请强制刷新（Ctrl/Cmd + Shift + R）。
 
+## 修改 data.js 后如何更新线上页面
+
+### 方式一：一键脚本（推荐，本机可用）
+
+```bash
+cd /data1/chan/vla-benchmark-site
+GH_TOKEN=ghp_你的令牌 node update.js
+```
+
+脚本会把 `data.js`（连同页面其它文件）通过 GitHub API 提交到
+`ChanCJY/vla-benchmark-results` 并等待 Pages 重新构建（约 1~3 分钟）。
+令牌在 https://github.com/settings/tokens 生成，需勾选 `repo` 权限；
+用完后可删除，下次更新再生成。
+
+### 方式二：标准 git 推送（在你自己电脑上）
+
+```bash
+git clone https://github.com/ChanCJY/vla-benchmark-results.git
+cd vla-benchmark-results
+# 编辑 data.js …
+git add data.js
+git commit -m "update benchmark results"
+git push origin main
+```
+
+仓库已配置为 GitHub Pages（源分支 main），推送后自动重新构建。
+
+> 注：在本服务器上直接 `git push` 到 github.com 可能因网络限制超时，
+> 因此推荐使用方式一的脚本（走 api.github.com，稳定可用）。
+
 ## 发布到 GitHub Pages
 
 本项目是纯静态站点，部署方式：
