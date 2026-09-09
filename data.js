@@ -223,7 +223,7 @@ window.BENCH_DATA = {
         { task: "put_bottles_dustbin", label: "把瓶子放在垃圾桶里", scores: { lingbot_nodepth: 83, lingbot_depth: 85, act: 29, xvla_80k: 3, xvla_40k: 1 } },
         { task: "put_object_cabinet", label: "放置物品到柜", scores: { lingbot_nodepth: 86, lingbot_depth: 82, act: 5, xvla_80k: 14, xvla_40k: 6 } },
         { task: "rotate_qrcode", label: "旋转二维码", scores: { lingbot_nodepth: 85, lingbot_depth: 83, act: 0, xvla_80k: 26, xvla_40k: 18 } },
-        { task: "scan_object", label: "扫描对象", scores: { lingbot_nodepth: 93, lingbot_depth: 94, act: 2, xvla_40k: 7 } },
+        { task: "scan_object", label: "扫描对象", scores: { lingbot_nodepth: 93, lingbot_depth: 94, act: 2, xvla_80k: 7, xvla_40k: 7 } },
         { task: "shake_bottle_horizontally", label: "水平摇晃瓶子", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 60, xvla_40k: 91 } },
         { task: "shake_bottle", label: "摇晃瓶子", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 74, xvla_40k: 94 } },
         { task: "stack_blocks_three", label: "红绿蓝块堆叠", scores: { lingbot_nodepth: 93, lingbot_depth: 89, act: 0, xvla_40k: 0 } },
