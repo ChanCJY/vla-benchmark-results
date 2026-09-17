@@ -228,7 +228,7 @@ window.BENCH_DATA = {
         { task: "shake_bottle", label: "摇晃瓶子", scores: { lingbot_nodepth: 100, lingbot_depth: 100, act: 74, xvla_80k: 91, xvla_40k: 94 } },
         { task: "stack_blocks_three", label: "红绿蓝块堆叠", scores: { lingbot_nodepth: 93, lingbot_depth: 89, act: 0, xvla_80k: 0, xvla_40k: 0 } },
         { task: "stack_blocks_two", label: "红绿块堆叠", scores: { lingbot_nodepth: 98, lingbot_depth: 99, act: 28, xvla_80k: 6, xvla_40k: 7 } },
-        { task: "stack_bowls_three", label: "堆叠三个碗", scores: { lingbot_nodepth: 86, lingbot_depth: 74, act: 59, xvla_40k: 0 } },
+        { task: "stack_bowls_three", label: "堆叠三个碗", scores: { lingbot_nodepth: 86, lingbot_depth: 74, act: 59, xvla_80k: 6, xvla_40k: 0 } },
         { task: "stack_bowls_two", label: "堆叠两个碗", scores: { lingbot_nodepth: 98, lingbot_depth: 97, act: 85, xvla_40k: 36 } },
         { task: "stamp_seal", label: "盖章", scores: { lingbot_nodepth: 74, lingbot_depth: 77, act: 3, xvla_40k: 50 } },
         { task: "turn_switch", label: "拨动开关", scores: { lingbot_nodepth: 55, lingbot_depth: 62, act: 3, xvla_40k: 15 } },

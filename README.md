@@ -27,6 +27,12 @@ RoboTwin 2.0 与 LIBERO 开源模型测评结果展示页，页面风格参考 T
 └── README.md
 ```
 
+## 页面功能
+
+- 结果表：RoboTwin 2.0 与 LIBERO 各套件逐任务成功率，自动标出每行最优、自动计算平均与排名；
+- **雷达图**：RoboTwin 2.0 任务类别雷达（按任务名归类，各类别等权）与 LIBERO 套件雷达（Spatial / Object / Goal / Long / LIBERO-10），悬停顶点可查看具体数值；
+- 条形图与结论卡片：按各基准平均分自动生成。
+
 ## 如何填写真实分数
 
 1. 打开 `data.js`，把 `meta.isSample` 保持为 `true` 期间，页面顶部会显示示例数据提示；
