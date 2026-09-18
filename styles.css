@@ -503,6 +503,22 @@ section {
   line-height: 1.4;
 }
 
+.banner-source {
+  display: block;
+  margin-top: 6px;
+}
+
+.banner-source a {
+  color: var(--primary-red-dark);
+  font-weight: 700;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.banner-source a:hover {
+  color: var(--primary-red);
+}
+
 /* ---------- 卡片与网格 ---------- */
 .grid {
   display: grid;

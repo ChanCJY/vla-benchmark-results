@@ -135,11 +135,16 @@
     );
     footer.textContent = footerParts.join(" · ");
 
-    if (meta.isSample) {
+    if (meta.isSample || meta.sourceRepo) {
       var banner = document.getElementById("sampleBanner");
       banner.hidden = false;
       document.getElementById("sampleBannerText").textContent =
         meta.sampleText || "";
+      var sourceLink = document.getElementById("sourceRepoLink");
+      if (sourceLink && meta.sourceRepo) {
+        sourceLink.href = meta.sourceRepo;
+        sourceLink.textContent = meta.sourceRepo.replace(/^https?:\/\//, "");
+      }
     }
 
     if (meta.title) document.title = meta.title;

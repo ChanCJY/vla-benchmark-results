@@ -34,6 +34,7 @@ window.BENCH_DATA = {
     ],
     isSample: false, // 已替换为真实测评数据
     sampleText: "",
+    sourceRepo: "https://github.com/ChanCJY/vla-benchmark-results", // 黄框中的源码仓库链接
   },
 
   /* ---------- 被测模型 ---------- */
