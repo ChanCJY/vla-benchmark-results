@@ -1,115 +1,122 @@
 # VLA Benchmark Results 页面
 
-RoboTwin 2.0 与 LIBERO 开源模型测评结果展示页，页面风格参考 TermiBrain-VL 站（浅色背景 + 红色强调 + 左侧导航 + 卡片布局）。
+RoboTwin 2.0 与 LIBERO 开源具身模型测评结果展示页，风格参考 TermiBrain-VL 站
+（浅色背景 + 红色强调 + 左侧导航 + 卡片布局）。
 
-📎 线上地址（GitHub Pages）：https://chancjy.github.io/vla-benchmark-results/
+- **线上地址**：https://chancjy.github.io/vla-benchmark-results/
+- **源码仓库**：https://github.com/ChanCJY/vla-benchmark-results
 
-## 数据来源与口径
+## 页面功能
 
-- 2026-09-07 同步自 `lingbotvla+ACT+pi05+RDT_eval_result.docx`；
-- 2026-09-07 追加同步 `starVLA.docx`（StarVLA-FAST / OFT / GR00T / π 的 LIBERO 全套结果）；
-- 2026-09-07 追加同步 `(完整)XVLA-RoboTwin.docx`（X-VLA 两个 checkpoint 的 RoboTwin 2.0 结果）；
-- 每个表格只收录 **Ours** 列，“Author’s” 列未收录；
-- RoboTwin 2.0：LingBot-VLA（无深度 / 有深度）、ACT 各 50 任务，RDT 仅含 31 个任务；
-- RoboTwin 2.0：X-VLA 80k / bs16 / 2×A100（41/50 任务）与 40k / bs56 / 6×A100（50 任务）；
-- LIBERO：Pi0.5（Spatial）与 StarVLA 各变体（Spatial / Object / Goal / LIBERO-10 / Long），每套件 10 任务 × 50 episodes；
-- StarVLA-π (Qwen3-VL) 的 LIBERO-Goal 在两份文档中不一致，本页以更新的 `starVLA.docx`（97.6）为准。
+- **结果表**：RoboTwin 2.0 与 LIBERO 各套件逐任务成功率，自动标出每行最优（★）、自动计算平均值与排名（🥇🥈🥉）；
+- **雷达图**：RoboTwin 2.0 任务类别雷达（按任务名归类、各类别等权）与 LIBERO 套件雷达（Spatial / Object / Goal / Long），悬停顶点可看具体数值；
+- **条形图与结论卡片**：按各基准的平均成功率自动生成；
+- 移动端自适应：窄屏下侧栏收起、表格可横向滚动、图表改为单列。
+
+页面为纯静态实现，不依赖任何外部库或 CDN，离线打开也能正常显示。
+
+## 数据概览
+
+各基准的模型覆盖情况：
+
+| 基准 | 模型 | 规模 |
+| --- | --- | --- |
+| RoboTwin 2.0 | LingBot-VLA（无深度 / 有深度）、ACT、RDT、X-VLA 80k / 40k | 50 个双臂任务；RDT 仅 31 个 |
+| LIBERO | Pi0.5、StarVLA-FAST / OFT(Qwen2.5-VL) / GR00T / OFT(Qwen3-VL) / π(Qwen3-VL) | 40 个任务 × 50 episodes |
+
+说明：
+
+- 未测评或文档未提供的任务不填分数（页面显示 “—”），也不计入平均值；
+- X-VLA 两个 checkpoint 分别为 80k / bs16 / 2×A100 与 40k / bs56 / 6×A100；
+- 页面分数统一保留一位小数，平均值与最高分由 `main.js` 实时计算。
 
 ## 目录结构
 
 ```text
 .
 ├── index.html    # 页面骨架与文案
-├── styles.css    # 样式
+├── styles.css    # 样式（含卡片、表格、雷达图）
 ├── data.js       # ⭐ 所有测评数据（模型、任务、分数）都维护在这里
-├── main.js       # 渲染逻辑（自动生成统计 / 表格 / 分析 / 图表）
+├── main.js       # 渲染逻辑（统计 / 表格 / 雷达图 / 条形图 / 结论）
+├── update.js     # 一键更新线上页面的脚本
 ├── favicon.svg
 └── README.md
 ```
 
-## 页面功能
+## 本地预览
 
-- 结果表：RoboTwin 2.0 与 LIBERO 各套件逐任务成功率，自动标出每行最优、自动计算平均与排名；
-- **雷达图**：RoboTwin 2.0 任务类别雷达（按任务名归类，各类别等权）与 LIBERO 套件雷达（Spatial / Object / Goal / Long / LIBERO-10），悬停顶点可查看具体数值；
-- 条形图与结论卡片：按各基准平均分自动生成。
+直接双击 `index.html` 即可，无需启动服务器。若内容没有刷新，强制刷新一次
+（Windows/Linux：`Ctrl + Shift + R`，macOS：`Cmd + Shift + R`）。
 
-## 如何填写真实分数
+## 如何修改数据
 
-1. 打开 `data.js`，把 `meta.isSample` 保持为 `true` 期间，页面顶部会显示示例数据提示；
-2. 每个基准下 `tasks` 数组里的 `scores` 对应各模型得分（成功率 %）；
-3. 没测的任务填 `null`（显示 “—”），不会计入平均值；
-4. 平均值、行内最高分、🏆 最优模型、条形图全部由 `main.js` 自动计算；
-5. 全部替换为真实结果后，将 `meta.isSample` 改为 `false`。
+所有分数都在 `data.js` 里，改完刷新页面即可生效。
 
-### 新增任务
+### 填写 / 修改分数
 
-在某个基准的 `tasks` 数组追加一行：
+每个基准的 `tasks` 数组代表一行任务，`scores` 里的键对应 `models` 中的模型 `id`：
 
 ```js
 {
-  task: "open_drawer",
-  label: "打开抽屉",              // 可选
-  scores: { starvla: 88.0, pi05: 82.0, xvla: 80.0 }
+  task: "open_drawer",          // 任务名，与文档 / 数据目录保持一致
+  label: "打开抽屉",             // 可选：页面上显示的中文说明
+  scores: {
+    starvla_oft: 88.0,          // 已测评：填成功率（%）
+    xvla_40k: null,             // 未测评：填 null，页面显示 “—” 且不计入平均
+  },
 }
 ```
 
-RoboTwin 2.0 官方 50 个任务名可参考仓库中的
-`RoboTwin/description/task_instruction/` 目录（共 50 个 yml/json 文件名）。
+### 新增任务
+
+在对应基准的 `tasks` 数组里追加一行即可，表格会多出一行。
+RoboTwin 2.0 官方的 50 个任务名可参考仓库中的
+`RoboTwin/description/task_instruction/` 目录。
 
 ### 新增模型
 
-先在 `models` 数组追加一条（`id` 需唯一），再把该 `id` 作为键补到每个
-`scores` 对象中；表格列会自动出现。
+1. 在 `models` 数组里追加一条，`id` 全局唯一；
+2. 在需要展示该模型的每个基准的 `models` 数组里加入这个 `id`（决定表格列与顺序）；
+3. 在各任务的 `scores` 里补上以该 `id` 为键的分数。
 
-## 本地预览
+### 其他可改项（`data.js` 的 `meta`）
 
-直接双击打开 `index.html` 即可（无需服务器）。若在浏览器里打开没有更新，
-请强制刷新（Ctrl/Cmd + Shift + R）。
+| 字段 | 说明 |
+| --- | --- |
+| `updatedAt` | 页面顶部与页脚显示的更新日期 |
+| `evalNotes` | “结果分析”里的测评说明列表 |
+| `sourceRepo` | 顶部黄框中的源码仓库链接（留空则不显示该黄框） |
+| `isSample` | 设为 `true` 时黄框会提示“当前为示例数据” |
+| `subtitle` / `metricNote` | 页面副标题与指标说明 |
 
-## 修改 data.js 后如何更新线上页面
+## 更新线上页面
 
-### 方式一：一键脚本（推荐，本机可用）
+### 方式一：一键脚本（推荐，在本机执行）
 
 ```bash
 cd /data1/chan/vla-benchmark-site
 GH_TOKEN=ghp_你的令牌 node update.js
 ```
 
-脚本会把 `data.js`（连同页面其它文件）通过 GitHub API 提交到
-`ChanCJY/vla-benchmark-results` 并等待 Pages 重新构建（约 1~3 分钟）。
-令牌在 https://github.com/settings/tokens 生成，需勾选 `repo` 权限；
-用完后可删除，下次更新再生成。
+脚本会读取本目录下的 `index.html`、`styles.css`、`data.js`、`main.js`、`README.md`、
+`update.js`，通过 GitHub API 提交到 `ChanCJY/vla-benchmark-results`，然后等待
+GitHub Pages 重新构建（约 1~3 分钟），构建完成后会打印线上地址。
 
-### 方式二：标准 git 推送（在你自己电脑上）
+令牌在 https://github.com/settings/tokens 生成（classic 类型，勾选 `repo` 权限），
+用完后可以随时删除，下次更新再生成即可。
+
+> 本服务器直连 github.com 可能超时，所以脚本走的是 `api.github.com`，更稳定。
+
+### 方式二：标准 git 推送（在自己电脑上）
 
 ```bash
 git clone https://github.com/ChanCJY/vla-benchmark-results.git
 cd vla-benchmark-results
-# 编辑 data.js …
-git add data.js
+# 编辑 data.js 等文件 …
+git add -A
 git commit -m "update benchmark results"
 git push origin main
 ```
 
-仓库已配置为 GitHub Pages（源分支 main），推送后自动重新构建。
-
-> 注：在本服务器上直接 `git push` 到 github.com 可能因网络限制超时，
-> 因此推荐使用方式一的脚本（走 api.github.com，稳定可用）。
-
-## 发布到 GitHub Pages
-
-本项目是纯静态站点，部署方式：
-
-```bash
-cd vla-benchmark-site
-git init
-git add .
-git commit -m "init benchmark page"
-# 在 GitHub 新建仓库后：
-git remote add origin https://github.com/<你的用户名>/<仓库名>.git
-git branch -M main
-git push -u origin main
-```
-
-然后在仓库 Settings → Pages 中把分支设为 `main`、目录设为 `/ (root)`，
-即可通过 `https://<用户名>.github.io/<仓库名>/` 访问。
+仓库已配置 GitHub Pages（源分支 `main`、目录 `/ (root)`），推送后会自动重新构建，
+无需再手动设置。
