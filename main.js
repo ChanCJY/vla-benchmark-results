@@ -391,6 +391,8 @@
     var benchWinners = [];
 
     data.benchmarks.forEach(function (b) {
+      /* 汇总卡片只是套件平均一览，不参与“最优模型”卡片与柱状图 */
+      if (b.isSummary) return;
       var avgs = benchmarkAverages(b);
       var ranking = topModels(avgs);
       benchWinners.push({
@@ -690,19 +692,17 @@
     return card;
   }
 
-  /* LIBERO：五个轴的套件雷达 */
+  /* LIBERO：四个套件的雷达（Long 即文档中的 LIBERO-10 / LIBERO_Long） */
   function liberoRadarCard() {
     var summary = findBench("libero_summary");
-    var l10 = findBench("libero_10");
     if (!summary) return null;
 
     var axes = [
-      { label: "Spatial", task: "LIBERO-Spatial" },
-      { label: "Object", task: "LIBERO-Object" },
-      { label: "Goal", task: "LIBERO-Goal" },
-      { label: "Long", task: "LIBERO-Long" },
+      { label: "Spatial", task: "Spatial" },
+      { label: "Object", task: "Object" },
+      { label: "Goal", task: "Goal" },
+      { label: "Long", task: "Long" },
     ];
-    var l10Avgs = l10 ? benchmarkAverages(l10) : {};
 
     var series = benchModels(summary).map(function (m) {
       var values = axes.map(function (ax) {
@@ -711,15 +711,8 @@
         })[0];
         return row && row.scores ? Number(row.scores[m.id]) : 0;
       });
-      values.push(l10Avgs[m.id] !== undefined ? l10Avgs[m.id] : 0);
       return { name: modelLabel(m.id), color: m.color || "#dc2626", values: values };
     });
-
-    var allAxes = axes
-      .map(function (a) {
-        return { label: a.label };
-      })
-      .concat([{ label: "LIBERO-10" }]);
 
     var card = el("div", "card radar-card");
     card.appendChild(el("h4", null, "🕸️ LIBERO 套件雷达"));
@@ -727,10 +720,17 @@
       el(
         "p",
         "radar-sub",
-        "Spatial / Object / Goal / Long / LIBERO-10 平均成功率（%）"
+        "Spatial / Object / Goal / Long 平均成功率（%）"
       )
     );
-    card.appendChild(radarSVG(allAxes, series));
+    card.appendChild(
+      radarSVG(
+        axes.map(function (a) {
+          return { label: a.label };
+        }),
+        series
+      )
+    );
     card.appendChild(radarLegend(series));
     card.appendChild(
       el(

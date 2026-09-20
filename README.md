@@ -27,6 +27,8 @@ RoboTwin 2.0 与 LIBERO 开源具身模型测评结果展示页，风格参考 T
 说明：
 
 - 未测评或文档未提供的任务不填分数（页面显示 “—”），也不计入平均值；
+- LIBERO 一共 4 个套件：Spatial / Object / Goal / Long（其中 Long 在文档中也写作 LIBERO-10，是同一个套件；页面单独成卡片时标题为 `LIBERO_Long`，id 为 `libero_long`，四套件并列时统一简写为 Long）；
+- 「LIBERO 套件平均一览」只是这 4 个套件的平均分汇总，不算第 5 个套件，也不参与结论卡片与柱状图的统计；
 - X-VLA 两个 checkpoint 分别为 80k / bs16 / 2×A100 与 40k / bs56 / 6×A100；
 - 页面分数统一保留一位小数，平均值与最高分由 `main.js` 实时计算。
 

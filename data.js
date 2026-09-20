@@ -31,6 +31,7 @@ window.BENCH_DATA = {
       "RDT 仅提供前 31 个任务，其余任务显示 “—” 且不计入平均值。",
       "X-VLA 两个 checkpoint：80k / bs16 / 2×A100 与 40k / bs56 / 6×A100 。",
       "LIBERO：每个套件 10 个任务 × 50 episodes，StarVLA 各变体按套件记录逐任务结果。",
+      "文档中的 LIBERO-10 与 Long 是同一个套件；本页卡片标题写作 LIBERO_Long，与其它套件并列时统一简写为 Long。",
     ],
     isSample: false, // 已替换为真实测评数据
     sampleText: "",
@@ -227,7 +228,7 @@ window.BENCH_DATA = {
         { task: "stack_blocks_three", label: "红绿蓝块堆叠", scores: { lingbot_nodepth: 93, lingbot_depth: 89, act: 0, xvla_80k: 0, xvla_40k: 0 } },
         { task: "stack_blocks_two", label: "红绿块堆叠", scores: { lingbot_nodepth: 98, lingbot_depth: 99, act: 28, xvla_80k: 6, xvla_40k: 7 } },
         { task: "stack_bowls_three", label: "堆叠三个碗", scores: { lingbot_nodepth: 86, lingbot_depth: 74, act: 59, xvla_80k: 6, xvla_40k: 0 } },
-        { task: "stack_bowls_two", label: "堆叠两个碗", scores: { lingbot_nodepth: 98, lingbot_depth: 97, act: 85, xvla_40k: 36 } },
+        { task: "stack_bowls_two", label: "堆叠两个碗", scores: { lingbot_nodepth: 98, lingbot_depth: 97, act: 85, xvla_80k: 41, xvla_40k: 36 } },
         { task: "stamp_seal", label: "盖章", scores: { lingbot_nodepth: 74, lingbot_depth: 77, act: 3, xvla_40k: 50 } },
         { task: "turn_switch", label: "拨动开关", scores: { lingbot_nodepth: 55, lingbot_depth: 62, act: 3, xvla_40k: 15 } },
       ],
@@ -235,15 +236,15 @@ window.BENCH_DATA = {
         "未测任务 “—” 不计入平均值。",
     },
 
-    /* LIBERO 汇总（starVLA.docx 汇总表，含 Long 总平均） */
+    /* LIBERO 汇总（starVLA.docx 汇总表，含 LIBERO_Long 平均） */
     {
       id: "libero_summary",
       group: "libero",
       isSummary: true,
-      name: "LIBERO 汇总",
+      name: "LIBERO 套件平均一览",
       icon: "🧾",
       tagline:
-        "LIBERO-Long 即 LIBERO-10。",
+        "LIBERO 共 4 个套件（Spatial / Object / Goal / Long），这里只是它们的平均分一览，不是额外套件；逐任务明细见下方 4 张卡片。",
       metric: "平均成功率 Average Success Rate (%)",
       models: [
         "starvla_fast_q25",
@@ -253,10 +254,10 @@ window.BENCH_DATA = {
         "starvla_pi",
       ],
       tasks: [
-        { task: "LIBERO-Spatial", label: "10 tasks 平均", scores: { starvla_fast_q25: 89.6, starvla_oft_q25: 98.0, starvla_groot_q25: 97.6, starvla_oft: 98.6, starvla_pi: 98.6 } },
-        { task: "LIBERO-Object", label: "10 tasks 平均", scores: { starvla_fast_q25: 97.4, starvla_oft_q25: 98.0, starvla_groot_q25: 99.2, starvla_oft: 100.0, starvla_pi: 97.8 } },
-        { task: "LIBERO-Goal", label: "10 tasks 平均", scores: { starvla_fast_q25: 90.0, starvla_oft_q25: 97.2, starvla_groot_q25: 97.2, starvla_oft: 98.6, starvla_pi: 97.6 } },
-        { task: "LIBERO-Long", label: "Long 总平均（无逐任务明细）", scores: { starvla_fast_q25: 84.4, starvla_oft_q25: 90.2, starvla_groot_q25: 90.2, starvla_oft: 95.4, starvla_pi: 95.6 } },
+        { task: "Spatial", label: "10 tasks 平均", scores: { starvla_fast_q25: 89.6, starvla_oft_q25: 98.0, starvla_groot_q25: 97.6, starvla_oft: 98.6, starvla_pi: 98.6 } },
+        { task: "Object", label: "10 tasks 平均", scores: { starvla_fast_q25: 97.4, starvla_oft_q25: 98.0, starvla_groot_q25: 99.2, starvla_oft: 100.0, starvla_pi: 97.8 } },
+        { task: "Goal", label: "10 tasks 平均", scores: { starvla_fast_q25: 90.0, starvla_oft_q25: 97.2, starvla_groot_q25: 97.2, starvla_oft: 98.6, starvla_pi: 97.6 } },
+        { task: "Long", label: "10 tasks 平均", scores: { starvla_fast_q25: 84.4, starvla_oft_q25: 90.2, starvla_groot_q25: 90.2, starvla_oft: 95.4, starvla_pi: 95.6 } },
       ],
       footNote:
         "综合平均行由 Spatial / Object / Goal / Long 四套件均值自动计算。",
@@ -354,13 +355,13 @@ window.BENCH_DATA = {
         "每任务 ×50 episodes。",
     },
 
-    /* LIBERO-10：逐任务 */
+    /* LIBERO_Long：逐任务（即文档中的 LIBERO-10 / Long） */
     {
-      id: "libero_10",
+      id: "libero_long",
       group: "libero",
-      name: "LIBERO-10",
+      name: "LIBERO_Long",
       icon: "🏅",
-      tagline: "10 个跨套件任务 × 50 episodes 逐任务成功率（%）：StarVLA 各变体。",
+      tagline: "10 任务 × 50 episodes 逐任务成功率（%）：StarVLA 各变体。",
       metric: "成功率 Success Rate (%)",
       models: [
         "starvla_fast_q25",
