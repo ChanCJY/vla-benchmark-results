@@ -6,7 +6,7 @@
  *    1) lingbotvla+ACT+pi05+RDT_eval_result.docx（RoboTwin 2.0 等，同步于 2026-09-07）
  *    2) starVLA.docx（StarVLA LIBERO 全套结果，同步于 2026-09-07）
  *    3) (完整)XVLA-RoboTwin.docx（X-VLA RoboTwin 2.0，同步于 2026-09-07）
- *  口径说明：仅收录每张表格的 “Ours” 列，“Author’s” 列未收录；
+ *  口径说明：
  *            未测 / 未提供数据的任务不写分数或填 null（页面显示 “—”）。
  *  冲突处理：starVLA.docx 与上一份文档中 StarVLA-π (Qwen3-VL) 的
  *            LIBERO-Goal 数值不一致，本页以更新的 starVLA.docx 为准。
@@ -31,7 +31,7 @@ window.BENCH_DATA = {
       "RDT 仅提供前 31 个任务，其余任务显示 “—” 且不计入平均值。",
       "X-VLA 两个 checkpoint：80k / bs16 / 2×A100 与 40k / bs56 / 6×A100 。",
       "LIBERO：每个套件 10 个任务 × 50 episodes，StarVLA 各变体按套件记录逐任务结果。",
-      "文档中的 LIBERO-10 与 Long 是同一个套件；本页卡片标题写作 LIBERO_Long，与其它套件并列时统一简写为 Long。",
+      "LIBERO-10 与 Long 是同一个套件。",
     ],
     isSample: false, // 已替换为真实测评数据
     sampleText: "",
@@ -244,7 +244,7 @@ window.BENCH_DATA = {
       name: "LIBERO 套件平均一览",
       icon: "🧾",
       tagline:
-        "LIBERO 共 4 个套件（Spatial / Object / Goal / Long），这里只是它们的平均分一览，不是额外套件；逐任务明细见下方 4 张卡片。",
+        "LIBERO 共 4 个套件（Spatial / Object / Goal / Long），逐任务明细见下方 4 张卡片。",
       metric: "平均成功率 Average Success Rate (%)",
       models: [
         "starvla_fast_q25",
