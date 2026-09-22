@@ -29,7 +29,7 @@ window.BENCH_DATA = {
     evalNotes: [
       "RoboTwin 2.0：官方 50 个双臂操作任务，逐任务记录成功率。",
       "RDT 仅提供前 31 个任务，其余任务显示 “—” 且不计入平均值。",
-      "X-VLA 两个 checkpoint：80k / bs16 / 2×A100 与 40k / bs56 / 6×A100 。",
+      "X-VLA 两个 checkpoint：80k / bs16 / 2×A100 与 40k / bs56 / 6×A100，均为 50 任务完整结果。",
       "LIBERO：每个套件 10 个任务 × 50 episodes，StarVLA 各变体按套件记录逐任务结果。",
       "LIBERO-10 与 Long 是同一个套件。",
     ],
@@ -229,8 +229,8 @@ window.BENCH_DATA = {
         { task: "stack_blocks_two", label: "红绿块堆叠", scores: { lingbot_nodepth: 98, lingbot_depth: 99, act: 28, xvla_80k: 6, xvla_40k: 7 } },
         { task: "stack_bowls_three", label: "堆叠三个碗", scores: { lingbot_nodepth: 86, lingbot_depth: 74, act: 59, xvla_80k: 6, xvla_40k: 0 } },
         { task: "stack_bowls_two", label: "堆叠两个碗", scores: { lingbot_nodepth: 98, lingbot_depth: 97, act: 85, xvla_80k: 41, xvla_40k: 36 } },
-        { task: "stamp_seal", label: "盖章", scores: { lingbot_nodepth: 74, lingbot_depth: 77, act: 3, xvla_40k: 50 } },
-        { task: "turn_switch", label: "拨动开关", scores: { lingbot_nodepth: 55, lingbot_depth: 62, act: 3, xvla_40k: 15 } },
+        { task: "stamp_seal", label: "盖章", scores: { lingbot_nodepth: 74, lingbot_depth: 77, act: 3, xvla_80k: 3, xvla_40k: 50 } },
+        { task: "turn_switch", label: "拨动开关", scores: { lingbot_nodepth: 55, lingbot_depth: 62, act: 3, xvla_80k: 22, xvla_40k: 15 } },
       ],
       footNote:
         "未测任务 “—” 不计入平均值。",
