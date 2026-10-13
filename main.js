@@ -104,6 +104,20 @@
     return entries;
   }
 
+  /* 榜单列：按该榜平均成功率从高到低。没有可计算平均的模型排在最后。 */
+  function sortModelsByAverage(list, avgs) {
+    return list.slice().sort(function (a, b) {
+      var aa = avgs[a.id];
+      var bb = avgs[b.id];
+      var aMissing = aa === undefined || aa === null;
+      var bMissing = bb === undefined || bb === null;
+      if (aMissing && bMissing) return 0;
+      if (aMissing) return 1;
+      if (bMissing) return -1;
+      return bb - aa;
+    });
+  }
+
   var rankMedals = ["🥇", "🥈", "🥉"];
 
   /* ---------- 顶部元信息 ---------- */
@@ -241,9 +255,9 @@
     }
     block.textContent = "";
 
-    var list = benchModels(bench);
-    var card = el("div", "card bench-card");
     var avgs = benchmarkAverages(bench);
+    var list = sortModelsByAverage(benchModels(bench), avgs);
+    var card = el("div", "card bench-card");
     var ranking = topModels(avgs);
     var bestAvg = ranking.length ? ranking[0].avg : null;
 

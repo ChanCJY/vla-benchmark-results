@@ -7,12 +7,8 @@
  *    2) starVLA.docx（StarVLA LIBERO 全套结果，同步于 2026-09-07）
  *    3) (完整)XVLA-RoboTwin.docx（X-VLA RoboTwin 2.0，同步于 2026-09-07）
  *    4) LingBot-VLA 2.0（lingbot-vla-v2-6b-robotwin，global_step_50000，fp32）
- *       demo_clean：2026-09-22 全量 + 2026-09-23 补测 3 个未跑满任务
- *       demo_randomized：2026-09-24 全量 50 任务
  *  口径说明：
  *            未测 / 未提供数据的任务不写分数或填 null（页面显示 “—”）。
- *  冲突处理：starVLA.docx 与上一份文档中 StarVLA-π (Qwen3-VL) 的
- *            LIBERO-Goal 数值不一致，本页以更新的 starVLA.docx 为准。
  *
  *  使用说明：
  *   1) scores 中的值表示成功率（%），如 89.6 会显示为 89.6%；
@@ -20,6 +16,7 @@
  *   3) 新增模型：先在 models 里加模型，再在 tasks 的 scores 里补键，
  *      并在对应 benchmark 的 models 数组里加入该模型 id；
  *   4) 平均值、行内最高分、最优模型与图表由 main.js 自动计算。
+ *      每个榜单的模型列按该榜平均成功率从高到低排列。
  * ========================================================= */
 
 window.BENCH_DATA = {
@@ -33,7 +30,7 @@ window.BENCH_DATA = {
       "RoboTwin 2.0：官方 50 个双臂操作任务，逐任务记录成功率。",
       "RDT 仅提供前 31 个任务，其余任务显示 “—” 且不计入平均值。",
       "X-VLA 两个 checkpoint：80k / bs16 / 2×A100 与 40k / bs56 / 6×A100，均为 50 任务完整结果。",
-      "LingBot-VLA 2.0（6B，50k，fp32）：demo_clean 与 demo_randomized 各 50 任务 × 100 episodes。demo_clean 的 place_object_scale / place_object_stand / place_phone_stand 首次未跑满，采用 2026-09-23 补测的完整 100 次结果。",
+      "LingBot-VLA 2.0（6B，50k，fp32）：demo_clean 与 demo_randomized 各 50 任务 × 100 episodes。",
       "LIBERO：每个套件 10 个任务 × 50 episodes，StarVLA 各变体按套件记录逐任务结果。",
       "LIBERO-10 与 Long 是同一个套件。",
     ],
@@ -69,7 +66,7 @@ window.BENCH_DATA = {
       name: "LingBot-VLA 2.0",
       base: "demo_clean",
       size: "6B",
-      desc: "lingbot-vla-v2-6b-robotwin global_step_50000，fp32。RoboTwin 2.0 demo_clean，50 任务 × 100 episodes。place_object_scale、place_object_stand、place_phone_stand 采用 2026-09-23 补测的完整结果。",
+      desc: "lingbot-vla-v2-6b-robotwin global_step_50000，fp32。",
       tags: ["RoboTwin 2.0", "LingBot-VLA 2.0"],
       repo: "",
       color: "#e11d48",
