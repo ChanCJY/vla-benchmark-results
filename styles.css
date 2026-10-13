@@ -770,6 +770,18 @@ section {
   word-break: break-word;
 }
 
+/* RoboTwin 2.0 任务名列加宽，英文任务 id 尽量保持单行 */
+#bench-robotwin2 .results-table th:nth-child(2),
+#bench-robotwin2 .task-cell {
+  width: 280px;
+  min-width: 280px;
+}
+
+#bench-robotwin2 .task-cell {
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
 .task-cell .task-sub {
   display: block;
   font-size: 12px;
